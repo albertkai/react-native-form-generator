@@ -2,194 +2,244 @@
 
 
 import React from 'react';
-let { View, StyleSheet, TextInput, Text, DatePickerAndroid} = require('react-native');
+import PropTypes from 'prop-types';
+import {View, StyleSheet, TextInput, Text, DatePickerAndroid} from 'react-native';
 import {Field} from './Field';
 
 
-  export class DatePickerComponent extends React.Component{
-    constructor(props){
-      super(props);
-      this.state = {
-        date: props.date? new Date(props.date) :'',
-        isPickerVisible: false
-      }
-
+export class DatePickerComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      date: props.date ? new Date(props.date) : '',
+      isPickerVisible: false
     }
 
-    handleLayoutChange(e){
-      let {x, y, width, height} = {... e.nativeEvent.layout};
+  }
 
-      this.setState(e.nativeEvent.layout);
-      //e.nativeEvent.layout: {x, y, width, height}}}.
-    }
+  handleLayoutChange(e) {
+    let {x, y, width, height} = {...e.nativeEvent.layout
+  }
+    ;
 
-    handleValueChange(date){
+    this.setState(e.nativeEvent.layout);
+    //e.nativeEvent.layout: {x, y, width, height}}}.
+  }
 
-      this.setState({date:date});
+  handleValueChange(date) {
 
-      if(this.props.onChange)      this.props.onChange((this.props.prettyPrint)?this.props.dateTimeFormat(date):date);
-      if(this.props.onValueChange) this.props.onValueChange(date);
-    }
-    setDate(date){
-      this.setState({date:date});
-      if(this.props.onChange)      this.props.onChange((this.props.prettyPrint)?this.props.dateTimeFormat(date):date);
-      if(this.props.onValueChange) this.props.onValueChange(date);
-    }
+    this.setState({date: date});
+
+    if (this.props.onChange) this.props.onChange((this.props.prettyPrint) ? this.props.dateTimeFormat(date) : date);
+    if (this.props.onValueChange) this.props.onValueChange(date);
+  }
+
+  setDate(date) {
+    this.setState({date: date});
+    if (this.props.onChange) this.props.onChange((this.props.prettyPrint) ? this.props.dateTimeFormat(date) : date);
+    if (this.props.onValueChange) this.props.onValueChange(date);
+  }
 
 
 //      this.refs.picker.measure(this.getPickerLayout.bind(this));
 
 
-    async _togglePicker(event){
-      try {
+  async
 
-        const {action, year, month, day} = await DatePickerAndroid.open({
-          date: this.props.date || new Date(),
-	  minDate:this.props.minimumDate,
+  _togglePicker(event) {
+    try {
 
-          maxDate:this.props.maximumDate
-        });
-        if (action !== DatePickerAndroid.dismissedAction) {
-          this.handleValueChange(new Date(year,month,day));
-          // Selected year, month (0-11), day
-        }
-      } catch ({code, message}) {
-          console.warn('Cannot open time picker', message);
+      const {action, year, month, day} = await
+      DatePickerAndroid.open({
+        date: this.props.date || new Date(),
+        minDate: this.props.minimumDate,
+
+        maxDate: this.props.maximumDate
+      });
+      if (action !== DatePickerAndroid.dismissedAction) {
+        this.handleValueChange(new Date(year, month, day));
+        // Selected year, month (0-11), day
       }
-      this.props.onPress && this.props.onPress(event);
+    } catch ({code, message}) {
+      console.warn('Cannot open time picker', message);
     }
-    
-    render(){
-      let placeholderComponent = (this.props.placeholderComponent)
-                        ? this.props.placeholderComponent
-                        : <Text style={[formStyles.fieldText, this.props.placeholderStyle]}>{this.props.placeholder}</Text>
-      return(<View><Field
-        {...this.props}
-        ref='inputBox'
-        onPress={this._togglePicker.bind(this)}>
-        <View style={[formStyles.fieldContainer,
-            formStyles.horizontalContainer,
-            this.props.containerStyle]}
-          onLayout={this.handleLayoutChange.bind(this)}>
-		  {(this.props.iconLeft)
-            ? this.props.iconLeft
-            : null
-          }
-          {placeholderComponent}
-          <View style={[formStyles.alignRight, formStyles.horizontalContainer]}>
-            <Text style={[formStyles.fieldValue,this.props.valueStyle ]}>{
-            (this.state.date)?this.state.date.toLocaleDateString():""
-          }</Text>
+    this.props.onPress && this.props.onPress(event);
+  }
 
-
-          </View>
-		  {(this.props.iconRight)
-              ? this.props.iconRight
-              : null
-          }
-        </View>
-        </Field>
-        {(this.state.isPickerVisible)?
-          <DatePickerAndroid
-            {...this.props}
-           date={this.state.date || new Date()}
-
-           onDateChange={this.handleValueChange.bind(this)}
-         />
-
+  render() {
+    let placeholderComponent = (this.props.placeholderComponent)
+      ? this.props.placeholderComponent
+      :
+  <
+    Text
+    style = {[formStyles.fieldText, this.props.placeholderStyle
+  ]
+  }>
+    {
+      this.props.placeholder
+    }
+  </
+    Text >
+    return ( < View > < Field
+    {...
+      this.props
+    }
+    ref = 'inputBox'
+    onPress = {this._togglePicker.bind(this)
+  }>
+  <
+    View
+    style = {
+      [formStyles.fieldContainer,
+      formStyles.horizontalContainer,
+      this.props.containerStyle
+  ]
+  }
+    onLayout = {this.handleLayoutChange.bind(this)
+  }>
+    {
+      (this.props.iconLeft)
+        ? this.props.iconLeft
         : null
-      }
-
-    </View>
-      )
     }
+    {
+      placeholderComponent
+    }
+  <
+    View
+    style = {[formStyles.alignRight, formStyles.horizontalContainer
+  ]
+  }>
+  <
+    Text
+    style = {[formStyles.fieldValue, this.props.valueStyle
+  ]
+  }>
+    {
+      (this.state.date) ? this.state.date.toLocaleDateString() : ""
+    }
+  </
+    Text >
 
+
+    < / View >
+    {(this.props.iconRight)
+      ? this.props.iconRight
+      : null
+  }
+  </
+    View >
+    < / Field >
+    {(this.state.isPickerVisible) ?
+  <
+    DatePickerAndroid
+    {...
+      this.props
+    }
+    date = {this.state.date || new Date()
   }
 
-  DatePickerComponent.propTypes = {
-    dateTimeFormat: React.PropTypes.func
+    onDateChange = {this.handleValueChange.bind(this)
+  }
+  />
+
+  :
+    null
   }
 
-  DatePickerComponent.defaultProps = {
-    dateTimeFormat: (date)=>{
-      if(!date) return "";
-      return date.toLocaleDateString()
-    }
-  };
+  </
+    View >
+  )
+  }
 
-    let formStyles = StyleSheet.create({
-      form:{
+}
 
-      },
-      alignRight:{
-         marginTop: 7, position:'absolute', right: 10
-      },
-      noBorder:{
-        borderTopWidth: 0,
-        borderBottomWidth: 0
-      },
-      separatorContainer:{
-        // borderTopColor: '#C8C7CC',
-        // borderTopWidth: 1,
-        paddingTop: 35,
-        borderBottomColor: '#C8C7CC',
-        borderBottomWidth: 1,
+DatePickerComponent.propTypes = {
+  dateTimeFormat: PropTypes.func
+}
 
-      },
-      separator:{
+DatePickerComponent.defaultProps = {
+    dateTimeFormat: (date) = > {
+    if(
+!date
+)
+return "";
+return date.toLocaleDateString()
+}
+}
+;
 
-        paddingLeft: 10,
-        paddingRight: 10,
-        color: '#6D6D72',
-        paddingBottom: 7
+let formStyles = StyleSheet.create({
+  form: {},
+  alignRight: {
+    marginTop: 7, position: 'absolute', right: 10
+  },
+  noBorder: {
+    borderTopWidth: 0,
+    borderBottomWidth: 0
+  },
+  separatorContainer: {
+    // borderTopColor: '#C8C7CC',
+    // borderTopWidth: 1,
+    paddingTop: 35,
+    borderBottomColor: '#C8C7CC',
+    borderBottomWidth: 1,
 
-      },
-      fieldsWrapper:{
-        // borderTopColor: '#afafaf',
-        // borderTopWidth: 1,
-      },
-      horizontalContainer:{
-        flexDirection: 'row',
+  },
+  separator: {
 
-        justifyContent: 'flex-start'
-      },
-      fieldContainer:{
-        borderBottomWidth: 1,
-        borderBottomColor: '#C8C7CC',
-        backgroundColor: 'white',
-        justifyContent: 'center',
-        height: 45
-      },
-      fieldValue:{
-        fontSize: 34/2,
-        paddingLeft: 10,
-        paddingRight: 10,
-        marginRight:10,
-        paddingTop: 4,
-        justifyContent: 'center',
+    paddingLeft: 10,
+    paddingRight: 10,
+    color: '#6D6D72',
+    paddingBottom: 7
 
-        color: '#C7C7CC'
-      },
-      fieldText:{
-        fontSize: 34/2,
-        paddingLeft: 10,
-        paddingRight: 10,
-        justifyContent: 'center',
-        lineHeight: 32
-      },
-      input:{
-        paddingLeft: 10,
-        paddingRight: 10,
+  },
+  fieldsWrapper: {
+    // borderTopColor: '#afafaf',
+    // borderTopWidth: 1,
+  },
+  horizontalContainer: {
+    flexDirection: 'row',
 
-      },
-      helpTextContainer:{
-        marginTop:9,
-        marginBottom: 25,
-        paddingLeft: 20,
-        paddingRight: 20,
+    justifyContent: 'flex-start'
+  },
+  fieldContainer: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#C8C7CC',
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    height: 45
+  },
+  fieldValue: {
+    fontSize: 34 / 2,
+    paddingLeft: 10,
+    paddingRight: 10,
+    marginRight: 10,
+    paddingTop: 4,
+    justifyContent: 'center',
 
-      },
-      helpText:{
-        color: '#7a7a7a'
-      }
-    });
+    color: '#C7C7CC'
+  },
+  fieldText: {
+    fontSize: 34 / 2,
+    paddingLeft: 10,
+    paddingRight: 10,
+    justifyContent: 'center',
+    lineHeight: 32
+  },
+  input: {
+    paddingLeft: 10,
+    paddingRight: 10,
+
+  },
+  helpTextContainer: {
+    marginTop: 9,
+    marginBottom: 25,
+    paddingLeft: 20,
+    paddingRight: 20,
+
+  },
+  helpText: {
+    color: '#7a7a7a'
+  }
+});
